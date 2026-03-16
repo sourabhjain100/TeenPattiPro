@@ -1,0 +1,804 @@
+{
+  "version": "4.5",
+  "date": "07 Mar 2026",
+  "players": [
+    "Manish",
+    "Chirag",
+    "Hridesh",
+    "Ashish",
+    "Vikram",
+    "Ankit",
+    "Sourabh",
+    "Chintan",
+    "Krishan"
+  ],
+  "transactions": [
+    {
+      "id": 1772855787156.3928,
+      "time": "9:56:27 PM",
+      "from": "Chintan",
+      "to": "Hridesh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772856018939.0796,
+      "time": "10:00:18 PM",
+      "from": "Chintan",
+      "to": "Ankit",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772856480016.6687,
+      "time": "10:08:00 PM",
+      "from": "Sourabh",
+      "to": "Ankit",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772856839505.203,
+      "time": "10:13:59 PM",
+      "from": "Sourabh",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772856871373.5872,
+      "time": "10:14:31 PM",
+      "from": "Ashish",
+      "to": "Ankit",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772856986962.8457,
+      "time": "10:16:26 PM",
+      "from": "Hridesh",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772856994578.5813,
+      "time": "10:16:34 PM",
+      "from": "Ankit",
+      "to": "Krishan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772857141291.9744,
+      "time": "10:19:01 PM",
+      "from": "Hridesh",
+      "to": "Chirag",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772857502313.9253,
+      "time": "10:25:02 PM",
+      "from": "Hridesh",
+      "to": "Chirag",
+      "amount": 10,
+      "status": "normal"
+    },
+    {
+      "id": 1772857506206.0383,
+      "time": "10:25:06 PM",
+      "from": "Vikram",
+      "to": "Chirag",
+      "amount": 10,
+      "status": "normal"
+    },
+    {
+      "id": 1772858030888.9753,
+      "time": "10:33:50 PM",
+      "from": "Sourabh",
+      "to": "Ashish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772858135302.502,
+      "time": "10:35:35 PM",
+      "from": "Hridesh",
+      "to": "Chirag",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772858326056.7214,
+      "time": "10:38:46 PM",
+      "from": "Chintan",
+      "to": "Krishan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772858437950.335,
+      "time": "10:40:37 PM",
+      "from": "Vikram",
+      "to": "Manish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772858437950.803,
+      "time": "10:40:37 PM",
+      "from": "Vikram",
+      "to": "Hridesh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772858437950.5625,
+      "time": "10:40:37 PM",
+      "from": "Vikram",
+      "to": "Krishan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772858936405.6362,
+      "time": "10:48:56 PM",
+      "from": "Vikram",
+      "to": "Krishan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772858990565.4292,
+      "time": "10:49:50 PM",
+      "from": "Chintan",
+      "to": "Ashish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772859143240.6206,
+      "time": "10:52:23 PM",
+      "from": "Sourabh",
+      "to": "Chirag",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772859143240.8022,
+      "time": "10:52:23 PM",
+      "from": "Sourabh",
+      "to": "Hridesh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772859143240.8242,
+      "time": "10:52:23 PM",
+      "from": "Sourabh",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772859143240.7507,
+      "time": "10:52:23 PM",
+      "from": "Sourabh",
+      "to": "Krishan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772859495922.7446,
+      "time": "10:58:15 PM",
+      "from": "Sourabh",
+      "to": "Chirag",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772859658253.1477,
+      "time": "11:00:58 PM",
+      "from": "Chirag",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772859672935.746,
+      "time": "11:01:12 PM",
+      "from": "Vikram",
+      "to": "Manish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772860182360.054,
+      "time": "11:09:42 PM",
+      "from": "Hridesh",
+      "to": "Ankit",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772860182360.854,
+      "time": "11:09:42 PM",
+      "from": "Hridesh",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772860531845.1912,
+      "time": "11:15:31 PM",
+      "from": "Vikram",
+      "to": "Manish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772860541196.3923,
+      "time": "11:15:41 PM",
+      "from": "Chirag",
+      "to": "Ashish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772860541197.6216,
+      "time": "11:15:41 PM",
+      "from": "Chirag",
+      "to": "Krishan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772861286047.316,
+      "time": "11:28:06 PM",
+      "from": "Sourabh",
+      "to": "Ankit",
+      "amount": 30,
+      "status": "normal"
+    },
+    {
+      "id": 1772861943523.9717,
+      "time": "11:39:03 PM",
+      "from": "Krishan",
+      "to": "Ankit",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772861943524.0898,
+      "time": "11:39:03 PM",
+      "from": "Krishan",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772861943524.219,
+      "time": "11:39:03 PM",
+      "from": "Krishan",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772861977342.8054,
+      "time": "11:39:37 PM",
+      "from": "Sourabh",
+      "to": "Ashish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772862331287.5083,
+      "time": "11:45:31 PM",
+      "from": "Ashish",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772862331287.7017,
+      "time": "11:45:31 PM",
+      "from": "Ashish",
+      "to": "Krishan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772862337735.9175,
+      "time": "11:45:37 PM",
+      "from": "Vikram",
+      "to": "Ankit",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772862679664.0718,
+      "time": "11:51:19 PM",
+      "from": "Krishan",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772863069749.863,
+      "time": "11:57:49 PM",
+      "from": "Chirag",
+      "to": "Hridesh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772863145589.1257,
+      "time": "11:59:05 PM",
+      "from": "Vikram",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772863521767.2617,
+      "time": "12:05:21 AM",
+      "from": "Krishan",
+      "to": "Ankit",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772863919719.3174,
+      "time": "12:11:59 AM",
+      "from": "Krishan",
+      "to": "Manish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864239474.3262,
+      "time": "12:17:19 AM",
+      "from": "Hridesh",
+      "to": "Chirag",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864250779.4456,
+      "time": "12:17:30 AM",
+      "from": "Krishan",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864581319.9158,
+      "time": "12:23:01 AM",
+      "from": "Chirag",
+      "to": "Manish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864581319.7585,
+      "time": "12:23:01 AM",
+      "from": "Chirag",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864581319.0625,
+      "time": "12:23:01 AM",
+      "from": "Chirag",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864666229.9092,
+      "time": "12:24:26 AM",
+      "from": "Hridesh",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864671180.7864,
+      "time": "12:24:31 AM",
+      "from": "Krishan",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864729028.446,
+      "time": "12:25:29 AM",
+      "from": "Hridesh",
+      "to": "Ashish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864904066.3582,
+      "time": "12:28:24 AM",
+      "from": "Hridesh",
+      "to": "Chirag",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864904066.093,
+      "time": "12:28:24 AM",
+      "from": "Hridesh",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772864917183.3867,
+      "time": "12:28:37 AM",
+      "from": "Krishan",
+      "to": "Ankit",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772865159540.2073,
+      "time": "12:32:39 AM",
+      "from": "Chintan",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772865159540.5168,
+      "time": "12:32:39 AM",
+      "from": "Chintan",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772865391701.7192,
+      "time": "12:36:31 AM",
+      "from": "Chintan",
+      "to": "Hridesh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772865426479.4294,
+      "time": "12:37:06 AM",
+      "from": "Hridesh",
+      "to": "Manish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866178365.1743,
+      "time": "12:49:38 AM",
+      "from": "Manish",
+      "to": "Chirag",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866178366.5508,
+      "time": "12:49:38 AM",
+      "from": "Manish",
+      "to": "Hridesh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866178366.5303,
+      "time": "12:49:38 AM",
+      "from": "Manish",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866192367.2852,
+      "time": "12:49:52 AM",
+      "from": "Vikram",
+      "to": "Ashish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866192367.1184,
+      "time": "12:49:52 AM",
+      "from": "Vikram",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866192367.2073,
+      "time": "12:49:52 AM",
+      "from": "Vikram",
+      "to": "Krishan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866283472.2559,
+      "time": "12:51:23 AM",
+      "from": "Hridesh",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866439851.9026,
+      "time": "12:53:59 AM",
+      "from": "Manish",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866912557.7688,
+      "time": "1:01:52 AM",
+      "from": "Manish",
+      "to": "Ashish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866912557.136,
+      "time": "1:01:52 AM",
+      "from": "Manish",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866912557.782,
+      "time": "1:01:52 AM",
+      "from": "Manish",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772866912557.8135,
+      "time": "1:01:52 AM",
+      "from": "Manish",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867078677.7256,
+      "time": "1:04:38 AM",
+      "from": "Manish",
+      "to": "Chirag",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867078678.013,
+      "time": "1:04:38 AM",
+      "from": "Manish",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867204738.3494,
+      "time": "1:06:44 AM",
+      "from": "Manish",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867314685.6716,
+      "time": "1:08:34 AM",
+      "from": "Vikram",
+      "to": "Hridesh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867314685.381,
+      "time": "1:08:34 AM",
+      "from": "Vikram",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867477507.0232,
+      "time": "1:11:17 AM",
+      "from": "Vikram",
+      "to": "Ankit",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867681211.1206,
+      "time": "1:14:41 AM",
+      "from": "Krishan",
+      "to": "Chirag",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867681211.8467,
+      "time": "1:14:41 AM",
+      "from": "Krishan",
+      "to": "Hridesh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867681211.9539,
+      "time": "1:14:41 AM",
+      "from": "Krishan",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867681211.1013,
+      "time": "1:14:41 AM",
+      "from": "Krishan",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867808417.4011,
+      "time": "1:16:48 AM",
+      "from": "Vikram",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867941404.3652,
+      "time": "1:19:01 AM",
+      "from": "Manish",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772867946785.8936,
+      "time": "1:19:06 AM",
+      "from": "Chintan",
+      "to": "Ashish",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772868216756.7222,
+      "time": "1:23:36 AM",
+      "from": "Manish",
+      "to": "Hridesh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772868216756.2146,
+      "time": "1:23:36 AM",
+      "from": "Manish",
+      "to": "Vikram",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772868216757.6392,
+      "time": "1:23:36 AM",
+      "from": "Manish",
+      "to": "Sourabh",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772868216757.9583,
+      "time": "1:23:36 AM",
+      "from": "Manish",
+      "to": "Chintan",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772868267634.0522,
+      "time": "1:24:27 AM",
+      "from": "Krishan",
+      "to": "Chirag",
+      "amount": 20,
+      "status": "normal"
+    },
+    {
+      "id": 1772868319507.6152,
+      "time": "1:25:19 AM",
+      "from": "Chintan",
+      "to": "Ashish",
+      "amount": 14,
+      "status": "normal"
+    },
+    {
+      "id": 1772868339377.2803,
+      "time": "1:25:39 AM",
+      "from": "Manish",
+      "to": "Hridesh",
+      "amount": 15,
+      "status": "normal"
+    },
+    {
+      "id": 1772868377694.288,
+      "time": "1:26:17 AM",
+      "from": "Manish",
+      "to": "Ankit",
+      "amount": 10,
+      "status": "normal"
+    },
+    {
+      "id": 1772868384823.7827,
+      "time": "1:26:24 AM",
+      "from": "Krishan",
+      "to": "Ankit",
+      "amount": 9,
+      "status": "normal"
+    },
+    {
+      "id": 1772868417412.0925,
+      "time": "1:26:57 AM",
+      "from": "Vikram",
+      "to": "Sourabh",
+      "amount": 11,
+      "status": "normal"
+    }
+  ],
+  "bankStatus": {
+    "Manish": true,
+    "Chirag": true,
+    "Hridesh": true,
+    "Ashish": true,
+    "Vikram": true,
+    "Ankit": true,
+    "Sourabh": true,
+    "Chintan": true,
+    "Krishan": true
+  },
+  "expenses": [
+    {
+      "id": 1772868512285,
+      "desc": "Hotel",
+      "amt": 90,
+      "payer": "Ankit",
+      "splitWith": [
+        "Manish",
+        "Chirag",
+        "Hridesh",
+        "Ashish",
+        "Vikram",
+        "Ankit",
+        "Sourabh",
+        "Chintan",
+        "Krishan"
+      ]
+    },
+    {
+      "id": 1772868583174,
+      "desc": "Drink",
+      "amt": 16,
+      "payer": "Chintan",
+      "splitWith": [
+        "Chirag",
+        "Hridesh",
+        "Vikram",
+        "Chintan"
+      ]
+    }
+  ],
+  "coinValue": "0.25"
+}
