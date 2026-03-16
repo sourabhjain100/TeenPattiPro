@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teen Patti Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root { --card-bg: #1e293b; }
+        body { background: #0f172a; color: #f8fafc; font-family: sans-serif; }
+        .glass-card { background: var(--card-bg); border: 1px solid #334155; border-radius: 8px; }
+        
+        input, select { 
+            background: #334155 !important; border: 1px solid #475569 !important; 
+            color: white !important; height: 38px; font-size: 14px !important; border-radius: 6px; padding: 0 12px; 
+        }
+
+        /* Color Change & Scale Effect for Buttons */
+        button { transition: transform 0.1s, background-color 0.1s; }
+        button:active { transform: scale(0.95); filter: brightness(1.2); }
+
+        #alertBanner {
+            position: fixed; top: 0; left: 0; right: 0; background: #ef4444; color: white;
+            padding: 12px; text-align: center; font-weight: bold; font-size: 14px;
+            z-index: 9999; transform: translateY(-100%); transition: transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        #alertBanner.show { transform: translateY(0); }
+        #alertBanner.bg-blue { background: #2563eb; }
+        #alertBanner.bg-green { background: #059669; }
+
+        .coin-val-input { width: 55px !important; height: 28px !important; font-size: 12px !important; text-align: center; padding: 0 4px !important; }
+        .borrower-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .borrower-cell { display: flex; align-items: center; justify-content: space-between; background: #263143; padding: 6px; border-radius: 6px; }
+        
+        .compact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 4px; }
+        .compact-chip { display: flex; align-items: center; gap: 4px; background: #263143; padding: 4px 6px; border-radius: 4px; border: 1px solid #334155; }
+        .compact-chip span { font-size: 10px; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .compact-chip input { width: 12px !important; height: 12px !important; margin: 0 !important; cursor: pointer; }
+
+        .coin-input { height: 32px !important; width: 48px !important; text-align: center; font-size: 14px !important; flex-shrink: 0; }
+        .coin-input:disabled { opacity: 0.2; cursor: not-allowed; background: #1a202c !important; }
+        .btn-gold { background: #f59e0b; color: black; font-weight: bold; }
+
+        .balance-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        .balance-table th, .balance-table td { padding: 10px 4px; border-bottom: 1px solid #334155; font-size: 13px; }
+        
+        .col-name { text-align: left; width: 40%; padding-left: 8px !important; }
+        .col-bank { text-align: center; width: 20%; }
+        .col-coins { text-align: center; width: 20%; }
+        .col-usd { text-align: center; width: 20%; padding-right: 8px !important; }
+        
+        .bank-tick { cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 100%; }
+        .tick-off { color: #475569; opacity: 0.4; }
+        .tick-on { color: #22c55e; opacity: 1; }
+
+        .tx-history { max-height: 250px; overflow-y: auto; font-size: 12px; }
+        .status-edited { color: #fbbf24 !important; } 
+        .status-deleted { color: #ef4444 !important; text-decoration: line-through; opacity: 0.5; } 
+
+        .section-header { font-size: 0.75rem; font-weight: 700; color: #f59e0b; text-transform: uppercase; }
+        #export-area, #history-export-area, #expense-export-area { padding: 20px; background: #0f172a; width: auto; min-width: 650px; position: absolute; left: -9999px; }
+
+        .hidden-page { display: none; }
+
+        .expense-row { cursor: pointer; transition: background 0.2s; }
+        .expense-row:active { background: #334155; }
+        .detail-pane { background: #0f172a; border-left: 2px solid #10b981; padding: 8px 12px; display: none; font-size: 11px; }
+        .detail-pane.active { display: table-row; }
+
+        .action-btn { 
+            padding: 4px 12px; border-radius: 4px; font-weight: bold; text-transform: uppercase; 
+            font-size: 10px; display: inline-flex; align-items: center; justify-content: center; min-width: 50px;
+        }
+
+        .gray-btn { background: #475569; color: white; font-size: 8px; font-weight: bold; text-transform: uppercase; padding: 4px 6px; border-radius: 4px; width: 60px; }
+        .blue-btn { background: #2563eb; color: white; font-size: 8px; font-weight: bold; text-transform: uppercase; padding: 4px 6px; border-radius: 4px; width: 60px; }
+        .emerald-btn { background: #059669; color: white; font-size: 8px; font-weight: bold; text-transform: uppercase; padding: 4px 6px; border-radius: 4px; width: 60px; }
+        
+        .row-highest { background-color: rgba(34, 197, 94, 0.15); }
+        .row-lowest { background-color: rgba(239, 68, 68, 0.15); }
+
+        .settle-table { width: 100%; border-collapse: collapse; font-size: 10px; color: #f8fafc; }
+        .settle-table th { background: #0f172a; color: #94a3b8; text-transform: uppercase; padding: 8px 4px; border: 1px solid #334155; }
+        .settle-table td { padding: 8px 4px; border: 1px solid #334155; text-align: center; white-space: nowrap; }
+        .sticky-col { position: sticky; left: 0; background: var(--card-bg); font-weight: bold; z-index: 10; border-right: 2px solid #334155 !important; }
+
+        .modal-input { width: 100%; margin-top: 10px; text-align: center; border: 2px solid #f59e0b !important; font-size: 18px !important; }
+    </style>
+</head>
+<body class="max-w-sm mx-auto p-3 pb-24">
+
+    <div id="alertBanner"></div>
+
+    <div id="ledgerPage">
+        <header class="mb-4 px-1">
+            <div class="flex justify-between items-start mb-2">
+                <h1 class="text-xl font-bold text-amber-500 uppercase">Teen Patti Pro</h1>
+                <div class="grid grid-cols-2 gap-1">
+                    <button onclick="haptic(); exportJSON()" class="blue-btn">Export</button>
+                    <button onclick="haptic(); document.getElementById('importInput').click()" class="emerald-btn">Import</button>
+                    <button onclick="haptic(); loadTestData()" class="gray-btn">Test</button>
+                    <button onclick="haptic(); resetData()" class="gray-btn">Reset</button>
+                    <input type="file" id="importInput" class="hidden" accept=".json" onchange="importJSON(event)">
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <span id="displayDate" class="text-[11px] text-slate-500 font-bold uppercase"></span>
+                <div class="flex items-center gap-2">
+                    <span class="text-[11px] font-bold text-slate-400 uppercase">Coin $:</span>
+                    <input type="number" id="coinValue" value="0.25" step="0.05" onchange="updateUI()" class="coin-val-input">
+                </div>
+            </div>
+        </header>
+
+        <div class="glass-card p-3 mb-3">
+            <div class="flex gap-2">
+                <input type="text" id="playerName" placeholder="Player Name" class="flex-grow">
+                <button onclick="haptic(); addPlayer()" class="bg-blue-600 px-4 rounded font-bold text-sm active:bg-blue-400">ADD</button>
+            </div>
+        </div>
+
+        <div class="glass-card p-3 mb-3">
+            <label class="text-xs font-bold text-blue-400 uppercase block mb-1">Lender</label>
+            <select id="fromPlayer" class="mb-3 w-full" onchange="handleLenderChange()"></select>
+            <label class="text-xs font-bold text-blue-400 uppercase block mb-1">Borrowers & Coins</label>
+            <div id="borrowerList" class="borrower-grid mb-3"></div>
+            <button onclick="haptic(); addMultiTransaction()" class="btn-gold w-full py-2.5 rounded shadow text-sm uppercase active:bg-amber-400">Add Transaction</button>
+        </div>
+
+        <div class="glass-card mb-3 overflow-hidden">
+            <table class="balance-table">
+                <thead>
+                    <tr>
+                        <th class="col-name">Player</th>
+                        <th class="col-bank">Bank</th>
+                        <th class="col-coins">Coins</th>
+                        <th class="col-usd">USD</th>
+                    </tr>
+                </thead>
+                <tbody id="ledgerBody"></tbody>
+            </table>
+        </div>
+
+        <div class="glass-card p-3 mb-3">
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="text-[10px] font-bold text-slate-400 uppercase">TRANSACTION HISTORY</h2>
+                <div class="flex gap-1">
+                    <button onclick="haptic(); exportHistoryJPG()" class="bg-indigo-600 text-[9px] px-2 py-1 rounded text-white font-bold uppercase active:bg-indigo-400">JPG</button>
+                    <button onclick="haptic(); toggleHistory()" id="historyBtn" class="bg-blue-900/40 text-[9px] px-3 py-1 rounded text-blue-400 border border-blue-800 font-bold uppercase ml-1">Show</button>
+                </div>
+            </div>
+            <div id="historyContent" class="tx-history hidden space-y-1"></div>
+        </div>
+    </div>
+
+    <div id="expensePage" class="hidden-page">
+        <header class="mb-4">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold text-emerald-500 uppercase">Group Expenses</h1>
+                <button onclick="haptic(); exportExpensesJPG()" class="bg-indigo-600 text-[10px] px-3 py-2 rounded text-white font-bold uppercase shadow">Export JPG</button>
+            </div>
+        </header>
+        <div class="glass-card p-3 mb-3">
+            <input type="hidden" id="editExpId" value="">
+            <div class="grid grid-cols-2 gap-2 mb-3">
+                <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Description</label><input type="text" id="expDesc" placeholder="Pizza" class="w-full"></div>
+                <div><label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Total USD ($)</label><input type="number" id="expAmount" placeholder="0.00" class="w-full"></div>
+            </div>
+            <label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Who Paid?</label>
+            <select id="expPayer" class="w-full mb-3"></select>
+            <label class="text-[10px] font-bold text-slate-400 uppercase block mb-1">Split Among</label>
+            <div id="expSplitList" class="compact-grid mb-3 bg-slate-800/30 p-2 rounded"></div>
+            <button id="addExpBtn" onclick="haptic(); addGroupExpense()" class="w-full bg-emerald-600 py-2.5 rounded font-bold text-sm uppercase shadow active:bg-emerald-400">Add Expense</button>
+        </div>
+        <div class="glass-card overflow-hidden">
+            <table class="w-full text-left text-xs border-collapse">
+                <thead class="bg-slate-800 text-slate-400">
+                    <tr><th class="p-3">Item</th><th class="p-3">Payer</th><th class="p-3 text-right">Amt</th><th class="p-3 text-center">Action</th></tr>
+                </thead>
+                <tbody id="expenseTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="settlePage" class="hidden-page">
+        <header class="mb-4 px-1"><h1 class="text-xl font-bold text-amber-500 uppercase">Final Settlement</h1></header>
+        <div class="glass-card p-3 border-t-2 border-amber-500 mb-3 overflow-hidden">
+            <h2 class="section-header mb-2">Net Position Breakdown</h2>
+            <div class="overflow-x-auto">
+                <table class="settle-table">
+                    <thead id="settleTableHeader"></thead>
+                    <tbody id="settleTableBody"></tbody>
+                </table>
+            </div>
+            <h2 class="section-header mb-2 mt-6">Who Pays Whom</h2>
+            <div id="settlementList" class="space-y-2 text-sm font-medium"></div>
+        </div>
+        <button onclick="haptic(); exportToJPG()" class="w-full bg-slate-700 text-white text-xs font-bold py-3 rounded uppercase border border-slate-500 mb-2 active:bg-slate-500">Download Summary</button>
+        <button onclick="haptic(); downloadDetailPDF()" class="w-full bg-slate-700 text-white text-xs font-bold py-3 rounded uppercase border border-slate-500 mb-3 active:bg-slate-500">Download Detail</button>
+    </div>
+
+    <div id="confirmModal" class="fixed inset-0 z-[10000] hidden flex items-center justify-center p-4 bg-black/80">
+        <div class="glass-card w-full max-w-xs overflow-hidden shadow-2xl border-slate-600">
+            <div class="p-4 border-b border-slate-700"><h3 id="modalTitle" class="text-lg font-bold text-amber-500 uppercase">Confirm</h3></div>
+            <div class="p-4"><p id="modalMessage" class="text-sm text-slate-300"></p><div id="modalInputContainer" class="hidden"><input type="number" id="modalValueInput" class="modal-input"></div></div>
+            <div class="flex justify-end gap-2 p-3 bg-slate-800/50">
+                <button onclick="haptic(); closeModal()" class="px-4 py-2 text-xs font-bold uppercase text-slate-400 active:text-white">Cancel</button>
+                <button id="modalConfirmBtn" class="px-4 py-2 text-xs font-bold uppercase bg-red-600 text-white rounded active:bg-red-400">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 max-w-sm mx-auto bg-slate-900 border-t border-slate-700 flex p-3 gap-1">
+        <button onclick="haptic(); showPage('ledger')" id="navLedger" class="flex-1 py-2.5 rounded font-bold text-[10px] uppercase bg-amber-600 text-black">Ledger</button>
+        <button onclick="haptic(); showPage('expense')" id="navExpense" class="flex-1 py-2.5 rounded font-bold text-[10px] uppercase bg-slate-800 text-slate-400">Expense</button>
+        <button onclick="haptic(); showPage('settle')" id="navSettle" class="flex-1 py-2.5 rounded font-bold text-[10px] uppercase bg-slate-800 text-slate-400">Settlement</button>
+    </div>
+
+    <div id="export-area"></div>
+    <div id="history-export-area"></div>
+    <div id="expense-export-area"></div>
+
+    <script>
+        const checkIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        
+        let players = JSON.parse(localStorage.getItem('tp_players_v42')) || [];
+        let transactions = JSON.parse(localStorage.getItem('tp_tx_v42')) || [];
+        let bankStatus = JSON.parse(localStorage.getItem('tp_bank_v42')) || {};
+        let expenses = JSON.parse(localStorage.getItem('tp_expenses_v42')) || [];
+
+        function haptic() {
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(15);
+            }
+        }
+
+        function save() {
+            localStorage.setItem('tp_players_v42', JSON.stringify(players));
+            localStorage.setItem('tp_tx_v42', JSON.stringify(transactions));
+            localStorage.setItem('tp_bank_v42', JSON.stringify(bankStatus));
+            localStorage.setItem('tp_expenses_v42', JSON.stringify(expenses));
+        }
+
+        function getFormattedDate() {
+            const d = new Date(), months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            return `${String(d.getDate()).padStart(2, '0')} ${months[d.getMonth()]} ${d.getFullYear()}`;
+        }
+        document.getElementById('displayDate').innerText = getFormattedDate();
+
+        function showConfirm(title, msg, onConfirm, isInput = false, defaultValue = "") {
+            const mT = document.getElementById('modalTitle'), mM = document.getElementById('modalMessage'), iC = document.getElementById('modalInputContainer'), iF = document.getElementById('modalValueInput'), cB = document.getElementById('modalConfirmBtn');
+            mT.innerText = title; mM.innerText = msg;
+            if(isInput) { iC.classList.remove('hidden'); iF.value = defaultValue; cB.classList.replace('bg-red-600', 'bg-blue-600'); }
+            else { iC.classList.add('hidden'); cB.classList.replace('bg-blue-600', 'bg-red-600'); }
+            document.getElementById('confirmModal').classList.remove('hidden');
+            cB.onclick = () => { haptic(); onConfirm(isInput ? iF.value : true); closeModal(); };
+        }
+        function closeModal() { document.getElementById('confirmModal').classList.add('hidden'); }
+        
+        function showAlert(msg, type = 'red') { 
+            const b = document.getElementById('alertBanner'); b.innerText = msg; b.className = 'show'; 
+            if(type === 'blue') b.classList.add('bg-blue'); else if(type === 'green') b.classList.add('bg-green');
+            setTimeout(() => b.classList.remove('show'), 3000); 
+        }
+
+        function showPage(page) {
+            document.getElementById('ledgerPage').classList.toggle('hidden-page', page !== 'ledger');
+            document.getElementById('expensePage').classList.toggle('hidden-page', page !== 'expense');
+            document.getElementById('settlePage').classList.toggle('hidden-page', page !== 'settle');
+            document.getElementById('navLedger').className = page === 'ledger' ? "flex-1 py-2.5 rounded font-bold text-[10px] uppercase bg-amber-600 text-black" : "flex-1 py-2.5 rounded font-bold text-[10px] uppercase bg-slate-800 text-slate-400";
+            document.getElementById('navExpense').className = page === 'expense' ? "flex-1 py-2.5 rounded font-bold text-[10px] uppercase bg-emerald-600 text-black" : "flex-1 py-2.5 rounded font-bold text-[10px] uppercase bg-slate-800 text-slate-400";
+            document.getElementById('navSettle').className = page === 'settle' ? "flex-1 py-2.5 rounded font-bold text-[10px] uppercase bg-amber-600 text-black" : "flex-1 py-2.5 rounded font-bold text-[10px] uppercase bg-slate-800 text-slate-400";
+            updateUI(); if(page === 'expense') renderExpenseUI();
+        }
+
+        function addPlayer() {
+            const nF = document.getElementById('playerName'), n = nF.value.trim();
+            if (!n || players.includes(n)) return showAlert("Player name is missing!");
+            players.push(n); bankStatus[n] = false; save(); nF.value = ''; updateUI();
+        }
+
+        function addMultiTransaction() {
+            const f = document.getElementById('fromPlayer').value; if (!f) return;
+            const ts = Date.now();
+            document.querySelectorAll('.borrower-amt').forEach(i => { 
+                const a = parseInt(i.value); 
+                if (a > 0) { transactions.push({ id: ts, from: f, to: i.dataset.player, amount: a, status: 'normal' }); i.value = ''; } 
+            });
+            save(); updateUI();
+        }
+
+        function updateUI() {
+            const cV = parseFloat(document.getElementById('coinValue').value) || 0;
+            const fS = document.getElementById('fromPlayer'), bL = document.getElementById('borrowerList'), cur = fS ? fS.value : "";
+            if(fS) { fS.innerHTML = '<option value="">Lender...</option>'; players.forEach(p => fS.innerHTML += `<option value="${p}" ${p === cur ? 'selected' : ''}>${p}</option>`); }
+            if(bL) { bL.innerHTML = ''; players.forEach(p => bL.innerHTML += `<div class="borrower-cell"><span class="text-xs font-bold">${p}</span><input type="number" class="borrower-amt coin-input" data-player="${p}"></div>`); handleLenderChange(); }
+
+            let cB = {}; players.forEach(p => cB[p] = 0);
+            transactions.forEach(t => { if (t.status !== 'deleted') { cB[t.from] += t.amount; cB[t.to] -= t.amount; } });
+
+            const lB = document.getElementById('ledgerBody');
+            const vals = Object.values(cB), max = vals.length ? Math.max(...vals) : 0, min = vals.length ? Math.min(...vals) : 0;
+            if(lB) lB.innerHTML = players.map(p => { 
+                const v = cB[p], c = v > 0 ? 'text-green-400' : (v < 0 ? 'text-red-400' : ''), r = (v===max && max>0)?'row-highest':((v===min && min<0)?'row-lowest':''); 
+                return `<tr class="${r}"><td class="col-name">${p}</td><td class="col-bank"><span class="bank-tick ${bankStatus[p]?'tick-on':'tick-off'}" onclick="haptic(); toggleBank('${p}')">${checkIcon}</span></td><td class="col-coins ${c} font-bold">${v}</td><td class="col-usd ${c}">$${(v*cV).toFixed(2)}</td></tr>`; 
+            }).join('');
+
+            const hC = document.getElementById('historyContent');
+            if(hC) {
+                const grouped = transactions.reduce((acc, t) => {
+                    if (!acc[t.id]) acc[t.id] = { from: t.from, details: [], status: t.status, id: t.id };
+                    acc[t.id].details.push(`${t.to} (${t.amount})`);
+                    if(t.status === 'deleted') acc[t.id].status = 'deleted';
+                    return acc;
+                }, {});
+
+                hC.innerHTML = Object.values(grouped).map((g, i) => `
+                    <div class="flex justify-between items-center p-2 border border-slate-800 ${g.status==='deleted'?'status-deleted':''}">
+                        <span>${i+1}. <b>${g.from}</b> &rarr; ${g.details.join(', ')}</span>
+                        <div>
+                            <button onclick="haptic(); ${g.status==='deleted'?'restoreTx':'deleteTx'}(${g.id})" class="action-btn bg-red-600 ml-1 active:bg-red-400">
+                                ${g.status==='deleted'?'Restore':'Delete'}
+                            </button>
+                        </div>
+                    </div>`).join('');
+            }
+
+            const hH = document.getElementById('settleTableHeader'), bH = document.getElementById('settleTableBody');
+            if(hH && bH) {
+                let hh = `<tr><th class="sticky-col">Players</th><th>Coins</th><th>Coins($)</th>`; expenses.forEach(e => hh += `<th>${e.desc}</th>`); hh += `<th>Net</th></tr>`; hH.innerHTML = hh;
+                let fU = {}; 
+                bH.innerHTML = players.map(p => {
+                    const totalCoins = cB[p];
+                    const cU = totalCoins * cV; let pN = cU; 
+                    let rh = `<tr><td class="sticky-col">${p}</td>
+                        <td class="${totalCoins > 0 ? 'text-green-400' : (totalCoins < 0 ? 'text-red-400' : '')}">${totalCoins}</td>
+                        <td class="${cU > 0 ? 'text-green-400' : (cU < 0 ? 'text-red-400' : '')}">${cU.toFixed(2)}</td>`;
+                    expenses.forEach(e => { let im = 0; if(e.payer === p) im += e.amt; if(e.splitWith.includes(p)) im -= (e.amt / e.splitWith.length); pN += im; rh += `<td class="${im > 0 ? 'text-green-400' : (im < 0 ? 'text-red-400' : '')}">${im.toFixed(2)}</td>`; });
+                    fU[p] = pN; rh += `<td class="font-bold ${pN >= 0 ? 'text-green-400' : 'text-red-400'}">$${pN.toFixed(2)}</td></tr>`; return rh;
+                }).join('');
+                const sL = document.getElementById('settlementList'); sL.innerHTML = ''; let ds = [], cs = [];
+                for (let p in fU) { if (fU[p] < -0.01) ds.push({n:p, a:Math.abs(fU[p])}); else if (fU[p] > 0.01) cs.push({n:p, a:fU[p]}); }
+                ds.forEach(d => { cs.forEach(c => { if (d.a > 0 && c.a > 0) { let p = Math.min(d.a, c.a); sL.innerHTML += `<div class="flex justify-between"><span>${d.n} &rarr; ${c.n}</span><span class="text-amber-500 font-bold">$${p.toFixed(2)}</span></div>`; d.a -= p; c.a -= p; } }); });
+            }
+        }
+
+        async function exportHistoryJPG() {
+            const a = document.getElementById('history-export-area'); 
+            a.style.width = "800px"; 
+            let rb = {}; players.forEach(p => rb[p] = 0);
+            
+            let hH = `<tr style="background:#1e293b; color:#94a3b8; text-transform:uppercase; font-size:10px;">
+                        <th style="padding:10px; border:1px solid #334155; width:30px;">#</th>
+                        <th style="padding:10px; border:1px solid #334155; text-align:left; width:220px;">Transaction Details</th>` + 
+                        players.map(p => `<th style="padding:8px; border:1px solid #334155; width:50px;">${p}</th>`).join('') + 
+                     `</tr>`;
+
+            const grouped = transactions.reduce((acc, t) => {
+                if (t.status === 'deleted') return acc;
+                if (!acc[t.id]) acc[t.id] = { from: t.from, details: [], changes: {}, totalCoins: 0 };
+                acc[t.id].details.push(`${t.to} (${t.amount})`);
+                acc[t.id].totalCoins += t.amount;
+                acc[t.id].changes[t.from] = (acc[t.id].changes[t.from] || 0) + t.amount;
+                acc[t.id].changes[t.to] = (acc[t.id].changes[t.to] || 0) - t.amount;
+                return acc;
+            }, {});
+
+            let rH = Object.values(grouped).map((g, i) => {
+                for (let p in g.changes) { rb[p] += g.changes[p]; }
+                
+                let detailHtml = `<div style="font-weight:700; color:#cbd5e1;"><b>${g.from}</b> &rarr; ${g.details.join(', ')}</div>`;
+
+                let cells = players.map(p => {
+                    const ch = g.changes[p] || 0;
+                    const chClr = ch > 0 ? '#4ade80' : '#f87171';
+                    const chTxt = ch !== 0 ? `<span style="color:${chClr}; font-size:8px; margin-right:2px;">(${(ch > 0 ? '+' : '') + ch})</span>` : '';
+                    
+                    return `<td style="padding:8px; border:1px solid #334155; text-align:right; white-space:nowrap;">
+                                ${chTxt}<span style="color:#f8fafc; font-weight:600; font-size:11px;">${rb[p]}</span>
+                            </td>`;
+                }).join('');
+
+                return `<tr style="border-bottom:1px solid #334155; background:#1e293b33;">
+                            <td style="padding:8px; border:1px solid #334155; text-align:center; color:#64748b; font-size:10px;">${i + 1}</td>
+                            <td style="padding:8px; border:1px solid #334155; color:#cbd5e1; font-size:10px;">
+                                ${detailHtml}
+                            </td>
+                            ${cells}
+                        </tr>`;
+            }).join('');
+
+            a.innerHTML = `<div style="padding:20px; background:#0f172a; color:white; font-family:sans-serif;">
+                    <h2 style="color:#f59e0b; text-transform:uppercase; margin-bottom:15px; font-size:16px; letter-spacing:1px;">Transaction Audit Ledger</h2>
+                    <table style="width:100%; border-collapse:collapse; font-size:11px;">${hH}${rH}</table>
+                    <div style="margin-top:15px; color:#475569; font-size:9px; text-align:right;">Generated on ${getFormattedDate()}</div>
+                </div>`;
+
+            const c = await html2canvas(a, { backgroundColor: '#0f172a', scale: 2 });
+            const l = document.createElement('a'); l.download = `History_${getFormattedDate()}.jpg`; l.href = c.toDataURL("image/jpeg", 0.9); l.click(); a.innerHTML = "";
+        }
+
+        function renderExpenseUI() {
+            const pS = document.getElementById('expPayer'), sL = document.getElementById('expSplitList'), cur = pS.value;
+            pS.innerHTML = '<option value="">Who paid?</option>'; sL.innerHTML = '';
+            players.forEach(p => { pS.innerHTML += `<option value="${p}" ${p === cur ? 'selected' : ''}>${p}</option>`; sL.innerHTML += `<label class="compact-chip"><input type="checkbox" value="${p}" class="split-check" checked><span>${p}</span></label>`; });
+            let h = ''; expenses.forEach(e => { h += `<tr class="expense-row" onclick="haptic(); toggleExpenseDetail(${e.id})"><td class="p-3">${e.desc}</td><td class="p-3">${e.payer}</td><td class="p-3 text-emerald-400 font-bold">$${e.amt.toFixed(2)}</td><td class="p-3" onclick="event.stopPropagation()"><button onclick="haptic(); editExpense(${e.id})" class="action-btn bg-blue-600 active:bg-blue-400">Edit</button><button onclick="haptic(); deleteExpense(${e.id})" class="action-btn bg-red-600 ml-1 active:bg-red-400">Del</button></td></tr><tr id="detail-${e.id}" class="detail-pane"><td colspan="4" class="p-3 text-slate-400 italic">Shared: ${e.splitWith.join(', ')}</td></tr>`; });
+            document.getElementById('expenseTableBody').innerHTML = h;
+        }
+
+        function addGroupExpense() {
+            const desc = document.getElementById('expDesc').value.trim(), amt = parseFloat(document.getElementById('expAmount').value), payer = document.getElementById('expPayer').value;
+            const split = Array.from(document.querySelectorAll('.split-check:checked')).map(cb => cb.value), editId = document.getElementById('editExpId').value;
+            if (!desc || isNaN(amt) || !payer || split.length === 0) return showAlert("Please fill all the details!");
+            if (editId) { const i = expenses.findIndex(e => e.id == editId); expenses[i] = { id: parseInt(editId), desc, amt, payer, splitWith: split }; document.getElementById('addExpBtn').innerText = 'Add Expense'; document.getElementById('editExpId').value = ''; }
+            else { expenses.push({ id: Date.now(), desc, amt, payer, splitWith: split }); }
+            document.getElementById('expDesc').value = ''; document.getElementById('expAmount').value = ''; save(); renderExpenseUI();
+        }
+
+        function toggleBank(p) { bankStatus[p] = !bankStatus[p]; save(); updateUI(); }
+        function handleLenderChange() { const l = document.getElementById('fromPlayer').value; document.querySelectorAll('.borrower-amt').forEach(i => i.disabled = (i.dataset.player === l)); }
+        
+        function deleteTx(id) { 
+            showConfirm("Delete?", "Remove this transaction record?", () => { 
+                transactions.forEach(t => { if(t.id === id) t.status = 'deleted'; });
+                save(); updateUI(); 
+            }); 
+        }
+        function restoreTx(id) { 
+            transactions.forEach(t => { if(t.id === id) t.status = 'normal'; });
+            save(); updateUI(); 
+        }
+
+        function toggleHistory() { const c = document.getElementById('historyContent'); c.classList.toggle('hidden'); document.getElementById('historyBtn').innerText = c.classList.contains('hidden')?'Show':'Hide'; }
+        function toggleExpenseDetail(id) { document.getElementById(`detail-${id}`).classList.toggle('active'); }
+        function editExpense(id) { const e = expenses.find(x => x.id === id); document.getElementById('expDesc').value = e.desc; document.getElementById('expAmount').value = e.amt; document.getElementById('expPayer').value = e.payer; document.getElementById('editExpId').value = e.id; document.getElementById('addExpBtn').innerText = 'Update'; document.querySelectorAll('.split-check').forEach(c => c.checked = e.splitWith.includes(c.value)); }
+        function deleteExpense(id) { showConfirm("Delete Expense?", "Are you sure you want to delete this expense?", () => { expenses = expenses.filter(x => x.id !== id); save(); renderExpenseUI(); }); }
+
+        function loadTestData() { showConfirm("Load Test?", "This will clear all the existing data and populate new test data. Do you want to proceed?", () => { players = ["Alice", "Bob", "Charlie", "David", "Eve", "Frank"]; bankStatus = {}; players.forEach(p => bankStatus[p] = Math.random() > 0.5); transactions = []; for(let i=0; i<15; i++) { let f = players[Math.floor(Math.random()*6)], t = players[(players.indexOf(f)+1)%6]; transactions.push({ id: Date.now()+i, from: f, to: t, amount: Math.floor(Math.random()*15)+1, status: 'normal' }); } expenses = [{ id: 101, desc: "Dinner", amt: 60, payer: "Alice", splitWith: players }]; save(); updateUI(); renderExpenseUI(); }); }
+        function resetData() { showConfirm("Reset All?", "Do you want to clear all data?", () => { players = []; transactions = []; bankStatus = {}; expenses = []; save(); updateUI(); renderExpenseUI(); }); }
+        
+        function exportJSON() {
+            const data = { players, transactions, bankStatus, expenses, coinValue: document.getElementById('coinValue').value };
+            const b = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const l = document.createElement('a'); l.href = URL.createObjectURL(b); l.download = `Backup_${getFormattedDate()}.json`; l.click();
+            showAlert("JSON Exported!", "blue");
+        }
+
+        function importJSON(ev) {
+            const f = ev.target.files[0]; if (!f) return;
+            const r = new FileReader(); r.onload = (e) => {
+                try {
+                    const d = JSON.parse(e.target.result);
+                    showConfirm("Import?", "This will overwrite data?", () => { players = d.players || []; transactions = d.transactions || []; bankStatus = d.bankStatus || {}; expenses = d.expenses || []; if(d.coinValue) document.getElementById('coinValue').value = d.coinValue; save(); updateUI(); renderExpenseUI(); showAlert("JSON Imported!", "green"); });
+                } catch (err) { showAlert("Invalid File"); }
+            }; r.readAsText(f); ev.target.value = '';
+        }
+
+        async function exportToJPG() {
+            const a = document.getElementById('export-area'); 
+            a.style.width = "400px";
+            const settleContent = document.getElementById('settlePage').cloneNode(true);
+            const buttons = settleContent.querySelectorAll('button');
+            buttons.forEach(btn => btn.remove());
+
+            a.innerHTML = `
+                <div style="padding:20px; background:#0f172a; color:white;">
+                    <h2 style="color:#f59e0b; margin-bottom:15px; font-family:sans-serif; text-transform:uppercase; font-size:16px;">
+                        SUMMARY - ${getFormattedDate()}
+                    </h2>
+                    ${settleContent.innerHTML}
+                </div>`;
+
+            try {
+                const c = await html2canvas(a, { backgroundColor: '#0f172a', scale: 2 });
+                const l = document.createElement('a'); 
+                l.download = `Summary_${getFormattedDate().replace(/ /g, '_')}.jpg`; 
+                l.href = c.toDataURL("image/jpeg", 0.95); 
+                l.click(); 
+            } catch (err) { showAlert("Export Failed"); } 
+            finally { a.innerHTML = ""; }
+        }
+
+        async function downloadDetailPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'mm', 'a4');
+            const cV = parseFloat(document.getElementById('coinValue').value) || 0;
+            const dateStr = getFormattedDate();
+
+            // --- HEADER ---
+            doc.setFontSize(18);
+            doc.setTextColor(245, 158, 11); 
+            doc.text(`TEEN PATTI PRO - FULL REPORT (${dateStr})`, 14, 15);
+            
+            // --- 1. TRANSACTION HISTORY AUDIT ---
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text("1. TRANSACTION HISTORY AUDIT", 14, 25);
+
+            let rb = {}; players.forEach(p => rb[p] = 0);
+            const grouped = transactions.reduce((acc, t) => {
+                if (t.status === 'deleted') return acc;
+                if (!acc[t.id]) acc[t.id] = { from: t.from, details: [], changes: {} };
+                acc[t.id].details.push(`${t.to}(${t.amount})`);
+                acc[t.id].changes[t.from] = (acc[t.id].changes[t.from] || 0) + t.amount;
+                acc[t.id].changes[t.to] = (acc[t.id].changes[t.to] || 0) - t.amount;
+                return acc;
+            }, {});
+
+            const auditHeaders = ["#", "Details", ...players];
+            const auditData = Object.values(grouped).map((g, i) => {
+                const row = [i + 1, `${g.from} -> ${g.details.join(', ')}` ];
+                players.forEach(p => {
+                    rb[p] += (g.changes[p] || 0);
+                    const ch = g.changes[p] || 0;
+                    const chText = ch !== 0 ? `(${(ch>0?'+':'')+ch}) ` : "";
+                    row.push(`${chText}${rb[p]}`);
+                });
+                return row;
+            });
+
+            doc.autoTable({
+                head: [auditHeaders],
+                body: auditData,
+                startY: 30,
+                theme: 'grid',
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: '#1e293b', halign: 'right' },
+                columnStyles: {
+                    0: { cellWidth: 10, halign: 'left' },
+                    1: { cellWidth: 60, halign: 'left' },
+                    ...players.reduce((acc, _, idx) => ({...acc, [idx+2]: { halign: 'right' }}), {})
+                },
+                didParseCell: function(data) {
+                    if (data.section === 'head' && data.column.index <= 1) data.cell.styles.halign = 'left';
+                    if (data.section === 'body' && data.column.index >= 2) {
+                        if (data.cell.text[0] && data.cell.text[0].includes('(+')) data.cell.styles.textColor = [34, 197, 94];
+                        else if (data.cell.text[0] && data.cell.text[0].includes('(-')) data.cell.styles.textColor = [239, 68, 68];
+                    }
+                }
+            });
+
+            // --- 2. PLAYER LEDGER SUMMARY (NEW PAGE) ---
+            doc.addPage();
+            doc.setFontSize(12);
+            doc.text("2. PLAYER LEDGER SUMMARY (COINS & USD)", 14, 15);
+
+            let cB = {}; players.forEach(p => cB[p] = 0);
+            transactions.forEach(t => { if (t.status !== 'deleted') { cB[t.from] += t.amount; cB[t.to] -= t.amount; } });
+            
+            const vals = Object.values(cB);
+            const maxVal = vals.length ? Math.max(...vals) : 0;
+            const minVal = vals.length ? Math.min(...vals) : 0;
+
+            const ledgerHeaders = ["Player", "Total Coins", "Total USD ($)"];
+            const ledgerData = players.map(p => [p, cB[p], `$${(cB[p] * cV).toFixed(2)}`]);
+
+            doc.autoTable({
+                head: [ledgerHeaders],
+                body: ledgerData,
+                startY: 20,
+                theme: 'grid',
+                headStyles: { fillColor: '#f59e0b', halign: 'right' },
+                columnStyles: { 0: { halign: 'left' }, 1: { halign: 'right' }, 2: { halign: 'right' } },
+                didParseCell: function(data) {
+                    if (data.section === 'head' && data.column.index === 0) data.cell.styles.halign = 'left';
+                    if (data.section === 'body') {
+                        const playerName = data.row.cells[0].text[0];
+                        const coinVal = cB[playerName];
+                        if (coinVal === maxVal && maxVal > 0) data.cell.styles.fillColor = [220, 252, 231];
+                        if (coinVal === minVal && minVal < 0) data.cell.styles.fillColor = [254, 226, 226];
+                        if (data.column.index >= 1) {
+                            if (coinVal > 0) data.cell.styles.textColor = [34, 197, 94];
+                            else if (coinVal < 0) data.cell.styles.textColor = [239, 68, 68];
+                        }
+                    }
+                }
+            });
+
+            // --- 3. GROUP EXPENSES ---
+            doc.text("3. GROUP EXPENSE DETAILS", 14, doc.lastAutoTable.finalY + 15);
+            const expHeaders = ["Description", "Paid By", "Amount", "Split Among"];
+            const expData = expenses.map(e => [e.desc, e.payer, `$${e.amt.toFixed(2)}`, e.splitWith.join(', ')]);
+            
+            doc.autoTable({
+                head: [expHeaders],
+                body: expData,
+                startY: doc.lastAutoTable.finalY + 20,
+                theme: 'striped',
+                headStyles: { fillColor: '#059669', halign: 'left' },
+                columnStyles: { 2: { halign: 'right' } },
+                didParseCell: function(data) {
+                    if(data.section === 'head' && data.column.index === 2) data.cell.styles.halign = 'right';
+                }
+            });
+
+            // --- 4. NET POSITION SUMMARY (NEW PAGE + COINS COLUMN) ---
+            doc.addPage();
+            doc.text("4. NET POSITION SUMMARY", 14, 15);
+            const netHeaders = ["Player", "Coins", "Coins ($)", ...expenses.map(e => e.desc), "Net Balance"];
+            let fU = {};
+            const netData = players.map(p => {
+                const totalCoins = cB[p];
+                const cU = totalCoins * cV; let pN = cU;
+                const row = [p, totalCoins, cU.toFixed(2)];
+                expenses.forEach(e => {
+                    let im = 0; if(e.payer === p) im += e.amt; if(e.splitWith.includes(p)) im -= (e.amt / e.splitWith.length);
+                    pN += im; row.push(im.toFixed(2));
+                });
+                fU[p] = pN;
+                row.push(`$${pN.toFixed(2)}`);
+                return row;
+            });
+
+            doc.autoTable({
+                head: [netHeaders],
+                body: netData,
+                startY: 20,
+                theme: 'grid',
+                headStyles: { halign: 'right' },
+                columnStyles: { 
+                    0: { halign: 'left' },
+                    ...netHeaders.reduce((acc, _, idx) => (idx > 0 ? {...acc, [idx]: { halign: 'right' }} : acc), {})
+                },
+                didParseCell: function(data) {
+                    if (data.section === 'head' && data.column.index === 0) data.cell.styles.halign = 'left';
+                    if (data.section === 'body' && data.column.index >= 1) {
+                        const val = parseFloat(data.cell.text[0].replace('$', ''));
+                        if (val > 0) data.cell.styles.textColor = [34, 197, 94];
+                        else if (val < 0) data.cell.styles.textColor = [239, 68, 68];
+                    }
+                }
+            });
+
+            // --- 5. WHO PAYS WHOM (BOXED) ---
+            const instructY = doc.lastAutoTable.finalY + 15;
+            doc.text("5. SETTLEMENT INSTRUCTIONS", 14, instructY);
+            let ds = [], cs = [];
+            for (let p in fU) { if (fU[p] < -0.01) ds.push({n:p, a:Math.abs(fU[p])}); else if (fU[p] > 0.01) cs.push({n:p, a:fU[p]}); }
+            let settlementLines = [];
+            ds.forEach(d => { cs.forEach(c => { if (d.a > 0 && c.a > 0) { let p = Math.min(d.a, c.a); settlementLines.push(`${d.n} pays ${c.n}: $${p.toFixed(2)}`); d.a -= p; c.a -= p; } }); });
+
+            if (settlementLines.length > 0) {
+                const boxTop = instructY + 5;
+                const boxWidth = 100;
+                const boxHeight = (settlementLines.length * 7) + 5; 
+                doc.setDrawColor(51, 65, 85);
+                doc.setLineWidth(0.5);
+                doc.rect(14, boxTop, boxWidth, boxHeight);
+                doc.setFontSize(10);
+                settlementLines.forEach((line, index) => { doc.text(line, 19, boxTop + 7 + (index * 7)); });
+                doc.text("", 14, boxTop + boxHeight + 21);
+            } else { doc.text("No settlements required.", 14, instructY + 10); }
+
+            doc.save(`TeenPatti_Pro_Detail_${dateStr.replace(/ /g, '_')}.pdf`);
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
